@@ -43,6 +43,15 @@ class SarRequest(BaseModel):
     start_lon: float
     hours: int = 48
 
+@app.get("/")
+def root():
+    return {
+        "service": "SamudraDrishti API",
+        "status": "healthy",
+        "health": "/api/health",
+        "docs": "/docs"
+    }
+
 @app.get("/api/info")
 def root_info():
     return {
