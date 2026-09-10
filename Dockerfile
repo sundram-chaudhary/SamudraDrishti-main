@@ -4,7 +4,8 @@ FROM python:3.11-slim
 # Avoid writing .pyc files and buffer stdout/stderr
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PYTHONPATH=/app/server
+    PYTHONPATH=/app/server \
+    PATH="/opt/venv/bin:$PATH"
 
 WORKDIR /app
 
@@ -15,8 +16,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Install Python scientific dependencies
 COPY server/requirements.txt /app/server/requirements.txt
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r /app/server/requirements.txt
+RUN python -m venv /opt/venv && \
+    /opt/venv/bin/pip install --no-cache-dir --upgrade pip && \
+    /opt/venv/bin/pip install --no-cache-dir -r /app/server/requirements.txt
 
 # Copy server application and ocean datasets
 COPY server /app/server
